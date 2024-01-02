@@ -2,16 +2,16 @@ import {inject, lifeCycleObserver} from '@loopback/core';
 import {juggler} from '@loopback/repository';
 
 const config = {
-  name: 'conn',
+  name: 'GestionEDBO',
   connector: 'mssql',
-  // url: 'mssql://sa:control1*@LAPTOPIT/1433/GildanConstancias',
-  host: 'LAPTOPIT',
+  url: 'mssql://sa:admin1@JOKSAN-IT/gildan/GildanConstancias',
+  host: 'JOKSAN-IT\\GILDAN',
   port: 1433,
   user: 'sa',
-  password: 'control1*',
+  password: 'admin1',
   database: 'GildanConstancias',
   options: {
-    enableArithAbort: true,
+    enableArithAbort: false,
   },
 };
 
