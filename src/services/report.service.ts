@@ -271,7 +271,7 @@ export class ReportService {
 
     //lecturas iniciales y finales
     for (let i = 0; i < Energy.length; i++) {
-      //T577 PTINCIPAL ACTIVA
+      //T577 PRINCIPAL ACTIVA
       if (Energy[i].displayName === 'RIONANCESE.MT577_P' && Energy[i].quantityID === 129) {
         if (i === 0) {
           T577PActivaInicial = Energy[0].Value;
@@ -294,7 +294,7 @@ export class ReportService {
         }
       }
 
-      //T577 PTINCIPAL REACTIVA
+      //T577 PRINCIPAL REACTIVA
       if (Energy[i].displayName === 'RIONANCESE.MT577_P' && Energy[i].quantityID === 91) {
         if (i === 0) {
           T577PReactivaInicial = Energy[0].Value;
@@ -790,9 +790,21 @@ export class ReportService {
     energiaReactivaBGIntervalo = ERCT_Mayor;
     demandaBGIntervalo = DEM_Mayor;
 
-    energiaActivaBG = (diferenciaActivaT577P + diferenciaActivaT577R) / 2 + (diferenciaActivaPT578 + diferenciaActivaRT578) / 2;
-    energiaReactivaBG = (diferenciaReactivaT577P + diferenciaReactivaT577R) / 2 + (diferenciaReactivaPT578 + diferenciaReactivaRT578) / 2;
-    demandaBG = (demandaT577P + demandaT577R) / 2 + (demandaT578P + demandaT578R) / 2;
+    console.log("energiaActivaBGIntervalo %%%%%%%%%%%%%%%%%%%%%%%", energiaActivaBGIntervalo)
+    console.log("energiaReactivaBGIntervalo %%%%%%%%%%%%%%%%%%%%%%%", energiaReactivaBGIntervalo)
+    if (rolloverActivaT577P === true || rolloverActivaT577R === true || rolloverActivaT578P === true || rolloverActivaT578R === true || rolloverReactivaT577P === true || rolloverReactivaT577R === true || rolloverReactivaT578P === true || rolloverReactivaT578R === true) {
+      energiaActivaBG = energiaActivaBGIntervalo;
+      energiaReactivaBG = energiaReactivaBGIntervalo;
+      demandaBG = (demandaT577P + demandaT577R) / 2 + (demandaT578P + demandaT578R) / 2;
+    } else {
+      // energiaActivaBG = (diferenciaActivaT577P + diferenciaActivaT577R) / 2 + (diferenciaActivaPT578 + diferenciaActivaRT578) / 2;
+      energiaActivaBG = (diferenciaT577PActiva + diferenciaT577RActiva) / 2 + (diferenciaActivaPT578 + diferenciaActivaRT578) / 2;
+      // energiaReactivaBG = (diferenciaReactivaT577P + diferenciaReactivaT577R) / 2 + (diferenciaReactivaPT578 + diferenciaReactivaRT578) / 2;
+      energiaReactivaBG = (diferenciaT577PReactiva + diferenciaT577RReactiva) / 2 + (diferenciaReactivaPT578 + diferenciaReactivaRT578) / 2;
+      demandaBG = (demandaT577P + demandaT577R) / 2 + (demandaT578P + demandaT578R) / 2;
+
+    }
+
 
 
     energiaActivaEG = EACT_AN;
