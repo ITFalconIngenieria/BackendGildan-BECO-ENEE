@@ -15,33 +15,6 @@ const config = {
   },
 };
 
-// const config = {
-//   name: 'GestionEDBO',
-//   connector: 'mssql',
-//   url: 'mssql://sa:admin1@localhost/GestionEnergetica',
-//   host: 'localhost',
-//   port: 1433,
-//   user: 'sa',
-//   password: 'admin1',
-//   database: 'GestionEnergetica',
-//   options: {
-//     enableArithAbort: true,
-//   },
-// };
-
-// const config = {
-//   name: 'GestionEDBO',
-//   connector: 'mssql',
-//   url: '',
-//   host: 'SVR-MONITOREO\\ION',
-//   port: 1433,
-//   user: 'facturacion',
-//   password: 'falcon1',
-//   database: 'GestionEnergetica',
-//   options: {
-//     enableArithAbort: true,
-//   },
-// };
 
 @lifeCycleObserver('datasource')
 export class GestionEdboDataSource extends juggler.DataSource {

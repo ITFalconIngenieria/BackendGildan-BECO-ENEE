@@ -1,5 +1,6 @@
 import { /* inject, */ BindingScope, injectable} from '@loopback/core/dist';
 import {repository} from '@loopback/repository';
+import {error} from 'console';
 import moment from 'moment';
 import {viewOf} from '../core/library/views.library';
 import {reportRepository} from '../repositories/reports.repository';
@@ -224,7 +225,28 @@ export class ReportService {
     let DEM_V = 0;
     let DEM_AE = 0;
 
+    //arreglos de ENEE
+    let arrayMT577P_G: number[] = [];
+    let arrayMT577R_R: number[] = [];
+    let arrayMT578P_G: number[] = [];
+    let arrayMT578R_R: number[] = [];
+    let arrayMTG1P_G: number[] = [];
+    let arrayMTG1R_R: number[] = [];
+    let arrayMTG1P_H: number[] = [];
+    let arrayMTG1R_S: number[] = [];
+    let arrayMTG2P_G: number[] = [];
+    let arrayMTG2R_R: number[] = [];
+    let arrayMTG2P_H: number[] = [];
+    let arrayMTG2R_S: number[] = [];
+    let arrayMTG3P_G: number[] = [];
+    let arrayMTG3R_R: number[] = [];
+    let arrayMTG3P_H: number[] = [];
+    let arrayMTG3R_S: number[] = [];
+    let arrayEAC_AG: number[] = [];
 
+    let arrayEAC_AE: number[] = [];
+    let arrayEAC_AN: number[] = [];
+    let ACT_Enee = 0;
     const Energy = await this.reportRepository.dataSource.execute(
       `${viewOf.getMedidores}   where (TimestampUTC = dateadd(hour,6,'${fechaInicial}') or TimestampUTC =  dateadd(hour,6,'${fechaFinal}'));`,
     );
@@ -239,6 +261,8 @@ export class ReportService {
     const diferenciaIntervalosReactiva = await this.reportRepository.dataSource.execute(
       `${viewOf.getMedidores}   WHERE TimestampUTC BETWEEN dateadd(hour, 6, '${fechaInicial2}') AND dateadd(hour, 6, '${fechaFinal}') AND quantityID = 96;`,
     );
+
+
 
     //diferencias por rollover
     for (let i = 0; i < diferenciaIntervalos.length; i++) {
@@ -522,112 +546,145 @@ export class ReportService {
 
     // console.log(dataM[0])
     for (let i = 0; i < dataM.length; i++) {
+      //T577
       if (dataM[i].displayName === 'RIONANCESE.MT577_P' && dataM[i].quantityID === 134) {
-        MT577P_G += dataM[i].Value;
+        MT577P_G = dataM[i].Value;
+        arrayMT577P_G.push(MT577P_G);
       }
       if (dataM[i].displayName === 'RIONANCESE.MT577_R' && dataM[i].quantityID === 134) {
-        MT577R_R += dataM[i].Value;
+        MT577R_R = dataM[i].Value;
+        arrayMT577R_R.push(MT577R_R)
       }
-      EACT_N = (MT577P_G + MT577R_R) / 2;
 
       //BE-T578
       if (dataM[i].displayName === 'RIONANCESE.MT578_P' && dataM[i].quantityID === 134) {
-        MT578P_G += dataM[i].Value;
-        // console.log(dataM[i].Value)
-
-
+        MT578P_G = dataM[i].Value;
+        arrayMT578P_G.push(MT578P_G);
       } else if (dataM[i].displayName === 'RIONANCESE.MT578_R' && dataM[i].quantityID === 134) {
-        MT578R_R += dataM[i].Value;
-        // console.log("T578R: ", MT578R_R)
+        MT578R_R = dataM[i].Value;
+        arrayMT578R_R.push(MT578R_R);
       }
-      // console.log("MT578R_R--------------", MT578R_R)
-      EACT_O = (MT578P_G + MT578R_R) / 2;
-
-      //AG SUMA DE N+O
-      EACT_AG = EACT_N + EACT_O;
-      //Hasta aqui todo Bien
 
       //CALCULANDO COLUMNA C DE EACT
       if (dataM[i].displayName === 'BECO.MTG1_P' && dataM[i].quantityID === 134) {
-        MTG1P_G += dataM[i].Value;
+        MTG1P_G = dataM[i].Value;
+        arrayMTG1P_G.push(MTG1P_G)
       }
       if (dataM[i].displayName === 'BECO.MTG1_R' && dataM[i].quantityID === 134) {
-        MTG1R_R += dataM[i].Value;
+        MTG1R_R = dataM[i].Value;
+        arrayMTG1R_R.push(MTG1R_R);
       }
-      EACT_C = (MTG1P_G + MTG1R_R) / 2;
-
-
       //CALCULANDO COLUMNA D DE EACT
       if (dataM[i].displayName === 'BECO.MTG1_P' && dataM[i].quantityID === 144) {
-        MTG1P_H += dataM[i].Value;
-
+        MTG1P_H = dataM[i].Value;
+        arrayMTG1P_H.push(MTG1P_H);
       }
       if (dataM[i].displayName === 'BECO.MTG1_R' && dataM[i].quantityID === 144) {
-        MTG1R_S += dataM[i].Value;
-
+        MTG1R_S = dataM[i].Value;
+        arrayMTG1R_S.push(MTG1R_S)
       }
-      EACT_D = (MTG1P_H + MTG1R_S) / 2;
-
-
       //CALCULANDO COLUMNA E DE EACT
       if (dataM[i].displayName === 'BECO.MTG2_P' && dataM[i].quantityID === 134) {
-        MTG2P_G += dataM[i].Value;
+        MTG2P_G = dataM[i].Value;
+        arrayMTG2P_G.push(MTG2P_G);
       }
       if (dataM[i].displayName === 'BECO.MTG2_R' && dataM[i].quantityID === 134) {
-        MTG2R_R += dataM[i].Value;
+        MTG2R_R = dataM[i].Value;
+        arrayMTG2R_R.push(MTG2R_R);
       }
-      EACT_E = (MTG2P_G + MTG2R_R) / 2;
-
       //CALCULANDO COLUMNA F DE EACT
       if (dataM[i].displayName === 'BECO.MTG2_P' && dataM[i].quantityID === 144) {
-        MTG2P_H += dataM[i].Value;
+        MTG2P_H = dataM[i].Value;
+        arrayMTG2P_H.push(MTG2P_H);
       }
       if (dataM[i].displayName === 'BECO.MTG2_R' && dataM[i].quantityID === 144) {
-        MTG2R_S += dataM[i].Value;
+        MTG2R_S = dataM[i].Value;
+        arrayMTG2R_S.push(MTG2R_S);
       }
-      EACT_F = (MTG2P_H + MTG2R_S) / 2;
-
-      //Aqui cambie los medidores de BECO.MTG3_P a BECO.MTG2_P
       //CALCULANDO COLUMNA G DE EACT
-      if (dataM[i].displayName === 'BECO.MTG2_P' && dataM[i].quantityID === 134) {
-        MTG3P_G += dataM[i].Value;
+      if (dataM[i].displayName === 'BECO.MTG3_P' && dataM[i].quantityID === 134) {
+        MTG3P_G = dataM[i].Value;
+        arrayMTG3P_G.push(MTG3P_G);
       }
-      if (dataM[i].displayName === 'BECO.MTG2_R' && dataM[i].quantityID === 134) {
-        MTG3R_R += dataM[i].Value;
+      if (dataM[i].displayName === 'BECO.MTG3_R' && dataM[i].quantityID === 134) {
+        MTG3R_R = dataM[i].Value;
+        arrayMTG3R_R.push(MTG3R_R)
       }
-      EACT_G = (MTG3P_G + MTG3R_R) / 2;
       //CALCULANDO COLUMNA H DE EACT
-      if (dataM[i].displayName === 'BECO.MTG2_P' && dataM[i].quantityID === 144) {
-        MTG3P_H += dataM[i].Value;
+      if (dataM[i].displayName === 'BECO.MTG3_P' && dataM[i].quantityID === 144) {
+        MTG3P_H = dataM[i].Value;
+        arrayMTG3P_H.push(MTG3P_H)
       }
-      if (dataM[i].displayName === 'BECO.MTG2_R' && dataM[i].quantityID === 144) {
-        MTG3R_S += dataM[i].Value;
-      }
-      EACT_H = (MTG3P_H + MTG3R_S) / 2;
-      EACT_AE = (EACT_C - EACT_D) + (EACT_E - EACT_F) + (EACT_G - EACT_H);
-
-      //Calculo de la columna EACT-AN
-      if (EACT_AE >= 0) {
-        EACT_AG - EACT_AE < 0
-          ? EACT_AN = 0
-          : EACT_AN = EACT_AG - EACT_AE
-      }
-      else {
-        EACT_AN = EACT_AG;
-      }
-
-      //Revisar esto!!!
-      //caculando la col AH de la hoja EAC
-      if (EACT_AE != 0) {
-        EACT_AH = Math.max(0, Math.min(EACT_AE, EACT_AG));
-        sumEACT_AH += EACT_AH;
-      }
-      //CALCUANDO LA COL AI DE LA HOJA EACT
-      if (EACT_AG == 0) {
-        EACT_AI = 0;
-        sumEACT_AI += EACT_AI;
+      if (dataM[i].displayName === 'BECO.MTG3_R' && dataM[i].quantityID === 144) {
+        MTG3R_S = dataM[i].Value;
+        arrayMTG3R_S.push(MTG3R_S);
       }
     }
+
+
+    //nuevo
+    if (arrayMT577P_G.length === arrayMT577R_R.length && arrayMT578P_G.length === arrayMT578R_R.length && arrayMT577P_G.length === arrayMT578P_G.length) {
+      for (let i = 0; i < arrayMT577P_G.length; i++) {
+        EACT_N = (arrayMT577P_G[i] + arrayMT577R_R[i]) / 2;
+        EACT_O = (arrayMT578P_G[i] + arrayMT578R_R[i]) / 2;
+        EACT_AG = EACT_N + EACT_O;
+        arrayEAC_AG.push(EACT_AG);
+      }
+    } else {
+      console.log("ARRAY no son iguales")
+      return error
+    }
+
+
+    if (arrayMTG1P_G.length === arrayMTG1R_R.length &&
+      arrayMTG1P_H.length === arrayMTG1R_S.length &&
+      arrayMTG2P_G.length === arrayMTG2R_R.length &&
+      arrayMTG2P_H.length === arrayMTG2R_S.length
+      &&
+      arrayMTG3P_G.length === arrayMTG3R_R.length
+      &&
+      arrayMTG3P_H.length === arrayMTG3R_S.length) {
+      for (let i = 0; i < arrayMTG1P_G.length; i++) {
+
+        EACT_C = (arrayMTG1P_G[i] + arrayMTG1R_R[i]) / 2;
+        EACT_D = (arrayMTG1P_H[i] + arrayMTG1R_S[i]) / 2;
+        EACT_E = (arrayMTG2P_G[i] + arrayMTG2R_R[i]) / 2;
+        EACT_F = (arrayMTG2P_H[i] + arrayMTG2R_S[i]) / 2;
+        EACT_G = (arrayMTG3P_G[i] + arrayMTG3R_R[i]) / 2;
+        EACT_H = (arrayMTG3P_H[i] + arrayMTG3R_S[i]) / 2;
+        //generacion
+        EACT_AE = (EACT_C - EACT_D) + (EACT_E - EACT_F) + (EACT_G - EACT_H);
+        arrayEAC_AE.push(EACT_AE)
+      }
+    } else {
+      console.log("Los arrays no tienen la misma longitud.");
+      return error
+    }
+
+
+    if (arrayEAC_AE.length === arrayEAC_AG.length) {
+      for (let i = 0; i < arrayEAC_AE.length; i++) {
+        if (arrayEAC_AE[i] >= 0) {
+          EACT_AN = Math.max(0, arrayEAC_AG[i] - arrayEAC_AE[i]);
+        } else {
+          console.log("SOY EACT_AG");
+          EACT_AN = arrayEAC_AG[i];
+        }
+
+        console.log("EACT AN  ---------------- ", EACT_AN)
+        arrayEAC_AN.push(EACT_AN);
+      }
+
+    }
+
+
+    for (let i = 0; i < arrayEAC_AN.length; i++) {
+      if (arrayEAC_AN[i] != 0) {
+        console.log(arrayEAC_AN[i]);
+      }
+      ACT_Enee += arrayEAC_AN[i]
+    }
+
 
     //GILDAN-ENEE ENERGIA REACTIVA
 
@@ -784,30 +841,31 @@ export class ReportService {
     }
 
 
-
-
     energiaActivaBGIntervalo = EACT_mayor;
     energiaReactivaBGIntervalo = ERCT_Mayor;
     demandaBGIntervalo = DEM_Mayor;
 
-    console.log("energiaActivaBGIntervalo %%%%%%%%%%%%%%%%%%%%%%%", energiaActivaBGIntervalo)
-    console.log("energiaReactivaBGIntervalo %%%%%%%%%%%%%%%%%%%%%%%", energiaReactivaBGIntervalo)
-    if (rolloverActivaT577P === true || rolloverActivaT577R === true || rolloverActivaT578P === true || rolloverActivaT578R === true || rolloverReactivaT577P === true || rolloverReactivaT577R === true || rolloverReactivaT578P === true || rolloverReactivaT578R === true) {
-      energiaActivaBG = energiaActivaBGIntervalo;
-      energiaReactivaBG = energiaReactivaBGIntervalo;
-      demandaBG = (demandaT577P + demandaT577R) / 2 + (demandaT578P + demandaT578R) / 2;
-    } else {
-      // energiaActivaBG = (diferenciaActivaT577P + diferenciaActivaT577R) / 2 + (diferenciaActivaPT578 + diferenciaActivaRT578) / 2;
-      energiaActivaBG = (diferenciaT577PActiva + diferenciaT577RActiva) / 2 + (diferenciaActivaPT578 + diferenciaActivaRT578) / 2;
-      // energiaReactivaBG = (diferenciaReactivaT577P + diferenciaReactivaT577R) / 2 + (diferenciaReactivaPT578 + diferenciaReactivaRT578) / 2;
-      energiaReactivaBG = (diferenciaT577PReactiva + diferenciaT577RReactiva) / 2 + (diferenciaReactivaPT578 + diferenciaReactivaRT578) / 2;
-      demandaBG = (demandaT577P + demandaT577R) / 2 + (demandaT578P + demandaT578R) / 2;
-
-    }
+    // if (rolloverActivaT577P === true || rolloverActivaT577R === true || rolloverActivaT578P === true || rolloverActivaT578R === true || rolloverReactivaT577P === true || rolloverReactivaT577R === true || rolloverReactivaT578P === true || rolloverReactivaT578R === true) {
+    //   energiaActivaBG = energiaActivaBGIntervalo;
+    //   energiaReactivaBG = energiaReactivaBGIntervalo;
+    //   demandaBG = (demandaT577P + demandaT577R) / 2 + (demandaT578P + demandaT578R) / 2;
+    // } else {
+    //   energiaActivaBG = (diferenciaT577PActiva + diferenciaT577RActiva) / 2 + (diferenciaActivaPT578 + diferenciaActivaRT578) / 2;
+    //   energiaReactivaBG = (diferenciaT577PReactiva + diferenciaT577RReactiva) / 2 + (diferenciaReactivaPT578 + diferenciaReactivaRT578) / 2;
+    //   demandaBG = (demandaT577P + demandaT577R) / 2 + (demandaT578P + demandaT578R) / 2;
+    // }
 
 
 
-    energiaActivaEG = EACT_AN;
+    //Energia por intervalos
+
+    energiaActivaBG = (diferenciaActivaT577P + diferenciaActivaT577R) / 2 + (diferenciaActivaT578P + diferenciaActivaT578R) / 2;
+    energiaReactivaBG = (diferenciaReactivaT577P + diferenciaReactivaT577R) / 2 + (diferenciaReactivaT578P + diferenciaReactivaT578R) / 2;
+    demandaBG = (demandaT577P + demandaT577R) / 2 + (demandaT578P + demandaT578R) / 2;
+
+
+    // energiaActivaEG = EACT_AN;
+    energiaActivaEG = ACT_Enee;
     energiaReactivaEG = ERCT_AN;
     demandaEG = DEM_AE;
     let factorPotenciaEG = 0.0;
