@@ -389,7 +389,6 @@ export class ReportService {
     }
 
 
-
     //factor de potencia
     let sumaActivaProveedores = energiaActivaBECOGildan + energiaActivaEneeGildan;
     let denominador = Math.sqrt(Math.pow(energiaReactivaENEEGildan + energiaReactivaBecoGildan, 2) + Math.pow(energiaActivaBECOGildan + energiaActivaEneeGildan, 2));
@@ -410,7 +409,6 @@ export class ReportService {
     //
     dataM[0].demandaT577P = demandaT577P;
 
-
     //reporte T577 Respaldo
     //energia activa
     dataM[0].energiaActivaInicialRT577 = parseFloat(T577RActivaInicial.toFixed(2));
@@ -424,8 +422,6 @@ export class ReportService {
     dataM[0].rolloverReactivaT577R = rolloverReactivaT577R;
     //
     dataM[0].demandaT577R = parseFloat(demandaT577R.toFixed(2));
-
-
 
     //reporte T578 principal
     //Activa
@@ -441,7 +437,6 @@ export class ReportService {
     //
     dataM[0].demandaT578P = parseFloat(demandaT578P.toFixed(2));
 
-
     //reporte T578 Respaldo
     //Activa
     dataM[0].activaInicialRT578 = parseFloat(activaInicialRT578.toFixed(2));
@@ -456,7 +451,6 @@ export class ReportService {
     dataM[0].rolloverReactivaT578R = rolloverReactivaT578R;
     //
     dataM[0].demandaT578R = parseFloat(demandaT578R.toFixed(2));
-
 
     //resumen BECO GILDAN
     dataM[0].energiaActivaBG = parseFloat(energiaActivaBECOGildan.toFixed(2));
