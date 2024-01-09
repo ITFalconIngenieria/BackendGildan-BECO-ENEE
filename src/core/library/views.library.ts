@@ -5,3 +5,4 @@ export namespace viewOf {
   export const getDemanda = `SELECT TOP 1 Value, sourceID, displayName, TimestampUTC, sourceName, quantityID, dateadd(hour, -6, TimestampUTC) AS Fecha
   FROM dbo.getMedidores`;
 }
+
