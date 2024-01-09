@@ -5,22 +5,6 @@ import {viewOf} from '../core/library/views.library';
 import {reportRepository} from '../repositories/reports.repository';
 
 
-//Funcion para calcular la raiz cuadrada de los valores BigInt del F.P
-function sqrtNewton(b: bigint, precision: number = 64): bigint {
-  if (b < 0n) {
-    throw new Error("Cannot calculate square root of a negative number");
-  }
-
-  let x = b;
-
-  for (let i = 0; i < precision; i++) {
-    x = (x + b / x) >> 1n;
-  }
-
-  return x;
-}
-
-
 @injectable({scope: BindingScope.TRANSIENT})
 export class ReportService {
   constructor(
