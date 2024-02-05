@@ -460,7 +460,6 @@ export class ReportService {
       return {dataM};
     } else {
       const Energiadiaria = await this.reportRepository.dataSource.execute(`EXEC EnergiaDiaria '${fechaInicial}', '${fechaFinal}'`);
-      console.log("Energia Diaria ", Energiadiaria);
       Energiadiaria[0].mes = mes;
       Energiadiaria[0].anio = anio;
       return {Energiadiaria};
