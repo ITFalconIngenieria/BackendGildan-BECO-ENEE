@@ -153,12 +153,13 @@ export class reportController {
   }
 
 
-  @get('/get-dataMedidores/{fi}/{ff}')
+  @get('/get-dataMedidores/{fi}/{ff}/{rp}')
   async dataMedidores(
     @param.path.string('fi') fi: string,
     @param.path.string('ff') ff: string,
+    @param.path.string('rp') rp: string,
   ): Promise<any> {
-    return this.ReportService.dataMedidores(fi, ff);
+    return this.ReportService.dataMedidores(fi, ff, rp);
   }
 
 }
