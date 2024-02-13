@@ -63,7 +63,8 @@ export class ReportService {
     let demandaT578R = 0;
 
     //Variables globales
-    let sourceId: number[] = [8, 9, 17, 16, 19, 11, 14, 10];
+    let sourceId: number[] = [8, 9, 17, 16, 19, 11, 14, 10]; //locales
+    //let sourceId: number[] = [787, 788, 792, 791, 776, 777, 779, 778]; //produccion
     let fechaInicialMoment = moment(fechaInicial);
     fechaInicialMoment.add(15, 'minutes');
     let fechaInicial2 = fechaInicialMoment.format('YYYY-MM-DD HH:mm:ss.SSS');

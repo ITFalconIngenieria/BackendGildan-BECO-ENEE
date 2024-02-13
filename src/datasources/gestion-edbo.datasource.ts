@@ -10,8 +10,9 @@ const config = {
   user: 'sa',
   password: 'admin1',
   database: 'GildanConstancias',
+  requestTimeout: 300000,
   options: {
-    enableArithAbort: false,
+    enableArithAbort: true,
   },
 };
 
